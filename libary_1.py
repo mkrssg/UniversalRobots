@@ -37,31 +37,35 @@ def Tinv(T):
 def T_2_rpy(T):
     # T to roll(x, gamma) pitch(y, beta) yaw(z, alpha)
     
-    b = np.arctan2(-T[2][0], np.sqrt(np.exp(T[0][0])+np.exp(T[1][0])))
-    cb = np.cos(b)
-    a = np.arctan2(T[1][0]/cb, T[0][0]/cb)
-    g = np.arctan2(T[2][1]/cb, T[2][2]/cb) #gamma
+    b = np.arctan2(-T[2][0], np.sqrt(np.exp(T[0][0])+np.exp(T[1][0]))) #beta
+    a = np.arctan2(T[1][0]/np.cos(b), T[0][0]/np.cos(b)) #alpha
+    g = np.arctan2(T[2][1]/np.cos(b), T[2][2]/np.cos(b)) #gamma
     return np.array([g, b, a])
 
 def rpy_2_T(xyzrpy):
-	#roll pitch yaw to matrix S.13
-    #x, y, z, g, b, a = xyzrpy   # richtig?!
-#    g, b, a = xyzrpy
-#
-#    ca = np.cos(a)
-#    cb = np.cos(b)
-#    cg = np.cos(g)
-#    sa = np.sin(a)
-#    sb = np.sin(b)
-#    sg = np.sin(g)
-#    
-#    R = np.array[(ca*cb, ca*sb*sg-sa*cg, ca*sb*cg+sa*sg),(sa*cb, sa*sb*sg+ca*cg, sa*sb*cg - ca*sg),(-sb, cb*sg, cb*cg)]
-#    #T = rotvec_2_T(R)
-    #T = np.array[(ca*cb, ca*sb*sg-sa*cg, ca*sb*cg+sa*sg, 0),(sa*cb, sa*sb*sg+ca*cg, sa*sb*cg - ca*sg, 0),(-sb, cb*sg, cb*cg, 0), (0, 0, 0, 1)]
+	# roll pitch yaw to matrix 
+   # roll(x, gamma) pitch(y, beta) yaw(z, alpha)
+   
+    x = xyzrpy[0]
+    y = xyzrpy[1]
+    z = xyzrpy[2]   
+    g = xyzrpy[3]   #gamma,roll,x
+    b = xyzrpy[4]   #beta,pitch,y
+    a = xyzrpy[5]   #alpha,yaw,z
     
-    #T = np.dot(rotx(xyzrpy[3]), roty(xyzrpy[4]), rotz(xyzrpy[5]))
-    T = np.dot(rotx(xyzrpy[5]), roty(xyzrpy[4]), rotz(xyzrpy[3])) # S.17
+    #t = np.array[(0,0,0,x),(0,0,0,y),(0,0,0,z),(0,0,0,1)]
+    
+    R = np.eye(3)
+    R = np.dot(rotz(a), np.dot(roty(y), rotx(g)))
 
+    T = np.eye(4)
+    # Rotation
+    T[0:3,0:3] = R[0:3,0:3] 
+    # Translation
+    T[0,3] = x
+    T[1,3] = y
+    T[2,3] = z
+    
     return T
 
 def T_2_rotvec(T):
@@ -129,11 +133,28 @@ def rotvec_2_T(xyzrxryrz):
     T[1,3] = y
     T[2,3] = z 
     
-    R = np.eye(4)
-    R = np.dot(rotx(rx), np.dot(roty(ry), rotz(rz)))
-    #R = np.dot(np.dot(rotz(rz), roty(ry)), rotx(rx))
+    #Rotation
+    theta = np.sqrt(np.square(rx) + np.square(ry) + np.square(rz))
     
-    T[0:3,0:3] = R[0:3, 0:3]
+    kx = rx / theta
+    ky = ry / theta 
+    kz = rz / theta
+
+    st = np.sin(theta)
+    ct = np.cos(theta)
+    vt = 1 - ct
+	   
+    T[0,0] = kx * kx * vt + ct
+    T[0,1] = kx * ky * vt - kz * st
+    T[0,2] = kx * kz * vt + ky * st
+
+    T[1,0] = kx * ky * vt + kz * st
+    T[1,1] = ky * ky * vt + ct
+    T[1,2] = ky * kz * vt - kx * st
+
+    T[2,0] = kx * kz * vt -ky * st
+    T[2,1] = ky * kz * vt + kx * st
+    T[2,2] = kz * kz * vt + ct
    
     
     return T
@@ -160,29 +181,10 @@ def dhm(alpha, a, d, theta):
 
 
 def fk_ur(dh_para, q):
-#dh_para alle SPalten außer die mit q
 #forward Kinematics for UR type robots
-    #Vorwärtskinematik
-# ca 5 Funktionen incl Hilfsfunktionen
-       
-#    T_0_1 = rotz(q[0])
-#    # rotx (90grad)
-#    R_1_2 = np.dot(rotx(1.57079), rotz(q[1]))
-#    l1x = dh_para[0][2]
-#    l1z = 0 #????
-#    T_1_2 = np.dot(R_1_2, transl(l1x, 0, l1z))
-#    T_2_3 = np.dot(rotz(q[2]), transl(dh_para[1][1],0,0))
-#    T_3_4 = np.dot(rotz(q[3]), transl(dh_para[2][1],0,0))
-#    T_4_5 = np.dot(rotz(q[4]), transl(dh_para[3][2],0,0))
-#    T_5_6 = np.dot(rotz(q[5]), transl(dh_para[4][2],0,0))
-#    #weil erstes Hilfskoordinatensystem ist sinds 7
-#    T_6_7 = np.dot(rotz(q[]))
-    
-    #oder mit dh
+
     T_0_1 = dh(dh_para[0][0], dh_para[0][1], dh_para[0][2], q[0])
-    #print("T01 = ", T_0_1)
     T_1_2 = dh(dh_para[1][0], dh_para[1][1], dh_para[1][2], q[1])
-    #print("T02 = ", np.dot(T_0_1,T_1_2))
     T_2_3 = dh(dh_para[2][0], dh_para[2][1], dh_para[2][2], q[2])
     T_3_4 = dh(dh_para[3][0], dh_para[3][1], dh_para[3][2], q[3])
     T_4_5 = dh(dh_para[4][0], dh_para[4][1], dh_para[4][2], q[4])
@@ -190,110 +192,128 @@ def fk_ur(dh_para, q):
     
     T_0_6 = np.dot(np.dot(np.dot(np.dot(np.dot(T_0_1, T_1_2),T_2_3),T_3_4),T_4_5),T_5_6)
 
+    #print("T01 = ", T_0_1)
+    #print("T02 = ", np.dot(T_0_1,T_1_2))
     print("T_0_6 fk= ",T_0_6)
     
     return T_0_6
 
 def ik_ur(dh_para, tcp, sol):
     #Inverse Kinematics for UR type Robots
-    # Rückwärtskinematik
+
     T_0_6 = rotvec_2_T(tcp)
-    print("T_0_6 = ", T_0_6)
+    #print("T_0_6 = ", T_0_6)
 
     #Achse 5 in 0
     O5_in_0 = np.dot(T_0_6, np.array([0, 0, -dh_para[5, 2], 1])) #skr4,S.17
-    print("O5_in_0 = ", O5_in_0)
-    # Winkel q1 
-    #----------todo------------ nr 3,4,5
+    #print("O5_in_0 = ", O5_in_0)
+    
+    """
+    Winkel q1
+    """
     O5_in_0_x = O5_in_0[0];
     O5_in_0_y = O5_in_0[1];
-    print("O5_in_0_x = ",O5_in_0_x)
-    print("O5_in_0_y = ", O5_in_0_y)
+    #print("O5_in_0_x = ",O5_in_0_x)
+    #print("O5_in_0_y = ", O5_in_0_y)
     
     alpha1 = np.arctan2(O5_in_0_y, O5_in_0_x)
-    print("alpha1 (rad) = ", alpha1)
+    #print("alpha1 (rad) = ", alpha1)
     
-    R = np.sqrt(np.square(O5_in_0_x) + np.square(O5_in_0_y))
-    
-    l4 = dh_para[3][2]
-    print ("l4 = ", l4)
-    print("R = ", R)
+    R = np.sqrt(O5_in_0_x**2 + O5_in_0_y**2)
+    #print("R = ", R)
+
+    l4 = abs(dh_para[3, 2])
+    #print ("l4 = ", l4)
     
     alpha2 = np.arccos(l4/R)
-    print("alpha2 (rad) = " , alpha2)
+    #print("alpha2 (rad) = " , alpha2)
     
     if (sol & 4 == 0):
         q1 = alpha1 + alpha2 + np.pi / 2
     else:
         q1 = alpha1 - alpha2 + np.pi / 2
     
-    print("q1 = ", q1, " = ", np.degrees(q1))
+    #print("q1 = ", q1, " = ", np.degrees(q1))
     
-    # Winkel q5
-    #------------todo--------------
+    """
+    Winkel q5
+    """
     s1 = np.sin(q1)
     c1 = np.cos(q1)
 
-    l6 = dh_para[5][2]
-    print("l6 = ",l6)
-    q5 = np.arccos((O5_in_0_x*s1 - O5_in_0_y*c1 - l4)/l6) 
+    l6 = abs(dh_para[5,2])
+    #print("l6 = ",l6)
+    q5 = np.arccos((T_0_6[0,3]*s1 - T_0_6[1,3]*c1 - l4)/l6) 
     
     if sol & 1:
         q5 = -q5
         
-    print("q5 = ", q5, " = ", np.degrees(q5))
+    #print("q5 = ", q5, " = ", np.degrees(q5))
     
-    #Winkel q6
-    #------------todo---------------
+    """
+    Winkel q6 
+    """
     s5 = np.sin(q5)
     c5 = np.cos(q5)
     
-    q6 = np.arctan2((-T_0_6[0,1]*s1 + T_0_6[1,1]*c1)/s5, (T_0_6[0,0]*s1 - T_0_6[1,0]*c1)/s5)
-    print("q6 = ", q6, " = ", np.degrees(q6))
+    #q6 = np.arctan2((-T_0_6[0,1]*s1 + T_0_6[1,1]*c1)/s5, (T_0_6[0,0]*s1 - T_0_6[1,0]*c1)/s5)
 
     #Ebenes Problem mit drei parallelen Achsen
     T_0_1 = dh(dh_para[0, 0], dh_para[0, 1], dh_para[0, 2], q1)
+    T_1_0 = Tinv(T_0_1)
+
+    T_1_6 = np.dot(T_1_0, T_0_6)
+    q6 = np.arctan2((-T_1_6[1,2]/s5),(T_1_6[0,2]/s5))
+    #print("q6 = ", q6, " = ", np.degrees(q6))
+
+
     T_4_5 = dh(dh_para[4, 0], dh_para[4, 1], dh_para[4, 2], q5)
     T_5_6 = dh(dh_para[5, 0], dh_para[5, 1], dh_para[5, 2], q6)
     T_4_6 = np.dot(T_4_5, T_5_6)
     T_6_4 = Tinv(T_4_6)
-    T_1_0 = Tinv(T_0_1)
     T_1_4 = np.dot(np.dot(T_1_0, T_0_6), T_6_4)
-    #90 Grad rotation zwischen 4 und 5 komkensieren
+    #90 Grad rotation zwischen 4 und 5 kompensieren
     T_1_4 = np.dot(T_1_4, rotx(-np.pi / 2))
-    print("T_1_4: ", T_1_4)
+    #print("T_1_4: ", T_1_4)
+    
+    
     
     x_S = T_1_4[0,3]
     y_S = T_1_4[1,3]
     #z_S = T_1_4[2,3]
-    print("x_S = ", x_S)
-    print("y_S = ", y_S)
-    #---------------------------------------------------laut prof
+    #print("x_S = ", x_S)
+    #print("y_S = ", y_S)
+    #--------------------------------------------------
     # weil ich hier T_1_4 verwende?
     l1 = abs(dh_para[1,1])   # wäre l2
     l2 = abs(dh_para[2,1])   # wäre l3
     #------------------------------------------------------------
     #l1 = abs(dh_para[0][2])
     #l2 = abs(dh_para[1][1])
-    print("l1 = ", l1)
-    print("l2 = ", l2)
+    #print("l1 = ", l1)
+    #print("l2 = ", l2)
     
 
-
-    # Winkel q3
-    #-----------------------todo----------------
+    """
+    Winkel q3
+    """
     cos_q3 = (np.square(x_S)+np.square(y_S)-np.square(l1)-np.square(l2))/(2*l1*l2)
-    print("cos_q3 = " , cos_q3)
-    q3 = np.arccos(cos_q3)
+    # handle NAN q3
+    if cos_q3 > 1: #
+        cos_q3_rounded = np.round(cos_q3, decimals=0)
+        
+    q3 = np.arccos(cos_q3_rounded)
         
     if (sol & 2 == 0):
         q3 = q3
     else:
         q3 = -q3
     
-    print("q3 = ", q3, " = ", np.degrees(q3))
-    #Winkel q2
-    #-------------------todo---------------
+    #print("q3 = ", q3, " = ", np.degrees(q3))
+    
+    """
+    Winkel q2
+    """
     x = x_S
     y = y_S
     beta = np.arctan2(y, x)
@@ -307,13 +327,30 @@ def ik_ur(dh_para, tcp, sol):
     if q2 < -np.pi:
         q2 = q2 + 2 * np.pi
     
-    print("q2 = ", q2, " = ", np.degrees(q2))
-    #Gesamtwinkel
-    q234 = 0 #---------------todo----------- ??????????????????
+    #print("q2 = ", q2, " = ", np.degrees(q2))
     
-    #Winkel q4
+    """
+    Gesamtwinkel
+    """
+    rotvec = T_2_rotvec(T_1_4)
+    q234 = rotvec[5]
+    
+    """
+    Winkel q4
+    """
     q4 = q234 - q2 - q3
-    print("q4 = ", q4, " = ", np.degrees(q4))
+    #print("q4 = ", q4, " = ", np.degrees(q4))
+    
+    
+#    print("q1 = ", q1, " = ", np.degrees(q1))
+#    print("q2 = ", q2, " = ", np.degrees(q2))
+#    print("q3 = ", q3, " = ", np.degrees(q3))
+#    print("q4 = ", q4, " = ", np.degrees(q4))
+#    print("q5 = ", q5, " = ", np.degrees(q5))
+#    print("q6 = ", q6, " = ", np.degrees(q6))
+
+
+
     
     return np.array([q1, q2, q3, q4, q5, q6])
         
