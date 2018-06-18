@@ -1,4 +1,5 @@
 import numpy as np
+import math 
 
 def rotx(a):
     ca = np.cos(a)
@@ -104,17 +105,7 @@ def T_2_rotvec(T):
     
     return np.array([x,y,z,rx,ry,rz])
 
-    # kinematik grundlagen 2
-	#rotation vector representation to matrix #S.19?
-#    R = rpy_2_T(xyzrxryrz)
-#    #print("R2 = ", R)
-#    t = transl((xyzrxryrz[0]), (xyzrxryrz[1]), (xyzrxryrz[2]))
-#    T = np.dot(t, R)        #eignetlich R, t
-#    print("T = ", T)
-    #T = np.array([(xyzrxryrz[0][0], xyzrxryrz[0][1], xyzrxryrz[0][2], 0), (xyzrxryrz[0][3], xyzrxryrz[0][4], xyzrxryrz[0][5], 0), (0, 0, 1, 0), (0, 0, 0, 1)]) 
-    #T = np.array([(-302,-186,557, 0),(0.4,1.3,-1.7,0), (0,0,1,0), (0,0,0,1)])
-    #funktioniert es so oder jedes Element einzeln in T einfügen?
-    #T = np.array[(ca*cb, ca*sb*sg-sa*cg, ca*sb*cg+sa*sg, 0),(sa*cb, sa*sb*sg+ca*cg, sa*sb*cg - ca*sg, 0),(-sb, cb*sg, cb*cg, 0), (0, 0, 0, 1)]
+ 
 def rotvec_2_T(xyzrxryrz):
     """
     rotation vector representation to matrix
@@ -261,8 +252,8 @@ def ik_ur(dh_para, tcp, sol):
     #Ebenes Problem mit drei parallelen Achsen
     T_0_1 = dh(dh_para[0, 0], dh_para[0, 1], dh_para[0, 2], q1)
     T_1_0 = Tinv(T_0_1)
-
     T_1_6 = np.dot(T_1_0, T_0_6)
+    
     q6 = np.arctan2((-T_1_6[1,2]/s5),(T_1_6[0,2]/s5))
     #print("q6 = ", q6, " = ", np.degrees(q6))
 
@@ -285,8 +276,8 @@ def ik_ur(dh_para, tcp, sol):
     #print("y_S = ", y_S)
     #--------------------------------------------------
     # weil ich hier T_1_4 verwende?
-    l1 = abs(dh_para[1,1])   # wäre l2
-    l2 = abs(dh_para[2,1])   # wäre l3
+    l1 = abs(dh_para[1,1])   
+    l2 = abs(dh_para[2,1])   
     #------------------------------------------------------------
     #l1 = abs(dh_para[0][2])
     #l2 = abs(dh_para[1][1])
@@ -300,9 +291,9 @@ def ik_ur(dh_para, tcp, sol):
     cos_q3 = (np.square(x_S)+np.square(y_S)-np.square(l1)-np.square(l2))/(2*l1*l2)
     # handle NAN q3
     if cos_q3 > 1: #
-        cos_q3_rounded = np.round(cos_q3, decimals=0)
+        cos_q3 = np.round(cos_q3, decimals=0)
         
-    q3 = np.arccos(cos_q3_rounded)
+    q3 = np.arccos(cos_q3)
         
     if (sol & 2 == 0):
         q3 = q3
@@ -317,8 +308,7 @@ def ik_ur(dh_para, tcp, sol):
     x = x_S
     y = y_S
     beta = np.arctan2(y, x)
-    psi = np.arccos((np.square(x)+np.square(y)-np.square(l1)-np.square(l2))/(2*l1*np.sqrt(np.square(x)+np.square(y))))
-    
+    psi = np.arccos((np.square(x) + np.square(y) + np.square(l1) - np.square(l2) ) / (2 * l1 * np.sqrt(np.square(x) + np.square(y))))
     if q3 > 0:
         q2= beta - psi - np.pi
     else:
@@ -340,21 +330,7 @@ def ik_ur(dh_para, tcp, sol):
     """
     q4 = q234 - q2 - q3
     #print("q4 = ", q4, " = ", np.degrees(q4))
-    
-    
-#    print("q1 = ", q1, " = ", np.degrees(q1))
-#    print("q2 = ", q2, " = ", np.degrees(q2))
-#    print("q3 = ", q3, " = ", np.degrees(q3))
-#    print("q4 = ", q4, " = ", np.degrees(q4))
-#    print("q5 = ", q5, " = ", np.degrees(q5))
-#    print("q6 = ", q6, " = ", np.degrees(q6))
-
-
 
     
     return np.array([q1, q2, q3, q4, q5, q6])
-        
-
-
-
-
+   

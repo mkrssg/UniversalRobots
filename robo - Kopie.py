@@ -4,8 +4,8 @@ import importlib
 import sys
 sys.path.insert(0, 'C:/Users/mkris/Documents/Master/3. Semester/Robotik/code')
 #imp.load_module('libary_1', 'C:/Users/mkris/Documents/Master/3. Semester/Robotik/code')
-import libary_1 as robo
-importlib.reload(robo)
+import robolibXXX as robo
+#importlib.reload(robo)
 
 #dh_para = np.array([(1.570796327, 0, 0.1519, 0), (0, -0.24365, 0, -1.570796327), (0, -0.21325, 0, 0), (1.570796327, 0, 0.11235, -1.570796327), (-1.570796327, 0, 0.08535, 0), (0, 0, 0.0819, 0)])
 #alle Spalten ohne q
@@ -21,8 +21,7 @@ q = np.array([0, -1.570796327, 0, -1.570796327, 0, 0])
 #home:
 #tcp = np.array([0, -0.19425, 0.69415, 0, 2.2214, -2.2214])
 #test ausgangspose assignment
-#tcp = np.array([-0.2986, -0.11235, 0.31365, 2.2214, 2.2214, -2.2214])
-tcp = np.array([0.11235, -0.29860, 0.31365, 0, 3.14, 0])
+tcp = np.array([-0.2986, -0.11235, 0.31365, 2.2214, 2.2214, -2.2214])
 
 """
 in mm
@@ -41,12 +40,12 @@ for i in range(8):
     q6 = winkel[5]
     
     print("Solution: ", i+1)
-    print("q1 = ", q1, " = ", np.degrees(q1))
-    print("q2 = ", q2, " = ", np.degrees(q2))
-    print("q3 = ", q3, " = ", np.degrees(q3))
-    print("q4 = ", q4, " = ", np.degrees(q4))
-    print("q5 = ", q5, " = ", np.degrees(q5))
-    print("q6 = ", q6, " = ", np.degrees(q6))
+    print("q1 = ", q1, " = ", np.rad2deg(q1))
+    print("q2 = ", q2, " = ", np.rad2deg(q2))
+    print("q3 = ", q3, " = ", np.rad2deg(q3))
+    print("q4 = ", q4, " = ", np.rad2deg(q4))
+    print("q5 = ", q5, " = ", np.rad2deg(q5))
+    print("q6 = ", q6, " = ", np.rad2deg(q6))
     
     i = i+1
     

@@ -7,6 +7,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 """
+Save plots to
+"""
+save_to ='C:/Users/mkris/Documents/Master/3. Semester/Robotik/code/trajektorien_plots'
+
+"""
 6 Achsen Trajektorieplanung
 """
 
@@ -90,21 +95,27 @@ for i in range(6):
     
     plt.figure(0)
     plt.plot(t, qt)
+    plt.xlabel('t in s')
+    plt.ylabel('q')
     plt.title('Position')
     if i == 5:
-        plt.savefig('trajketorien_plots/position.png')
+        plt.savefig(save_to + '/position.png')
     
     plt.figure(1)
     plt.title('Velocity')
+    plt.xlabel('t in s')
+    plt.ylabel('v')
     plt.plot(t,vt)
     if i == 5:
-        plt.savefig('trajketorien_plots/velocity.png')
+        plt.savefig(save_to + '/velocity.png')
     
     plt.figure(2)
     plt.plot(t,at)
+    plt.xlabel('t in s')
+    plt.ylabel('a')
     plt.title('Acceleration')
     if i == 5:
-        plt.savefig('trajketorien_plots/acceleration.png')
+        plt.savefig(save_to + '/acceleration.png')
 
 print("...plots saved")
 plt.show() 

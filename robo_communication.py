@@ -20,12 +20,12 @@ s.connect((HOST, PORT))
 
 #sleep(5)
 #
-#q1 = 90/180*np.pi
-#q2 = -90/180*np.pi
-#q3 = 90/180*np.pi
-#q4 = -90/180*np.pi
-#q5 = -90/180*np.pi
-#q6 = 0/180*np.pi
+q1 = 0/180*np.pi
+q2 = -90/180*np.pi
+q3 = 90/180*np.pi
+q4 = -90/180*np.pi
+q5 = -90/180*np.pi
+q6 = 0/180*np.pi
 ##
 #3 Achsen
 # von:
@@ -52,14 +52,15 @@ s.connect((HOST, PORT))
 #q6 = 0/180*np.pi
 
 #Beschleinigung
-#a = 1.0
-#v = 0.8
-#t = 10
+a = 1.0
+v = 0.8
+t = 10
 
-#command = "movej([" + str(q1) + "," + str(q2) + ","+str(q3)+","+str(q4)+","+str(q5)+","+str(q6)+"], a=" + str(a) +", v=" +str(v)+")\n"
+command = "movej([" + str(q1) + "," + str(q2) + ","+str(q3)+","+str(q4)+","+str(q5)+","+str(q6)+"], a=" + str(a) +", v=" +str(v)+")\n"
 #command = "movej([" + str(q1) + "," + str(q2) + ","+str(q3)+","+str(q4)+","+str(q5)+","+str(q6)+"],t=" + str(t) +")\n"
 
 #command = "movej([" + str(q1) + "," + str(q2) + ","+str(q3)+","+str(q4)+","+str(q5)+","+str(q6)+"], a=" + str(a) +", v=" +str(v)+")\n"
+s.send(command.encode('ascii'))
 
 """
 #6. movel x 400 with a,v/ time t --> movel_x400
@@ -79,7 +80,7 @@ command = "movej(p[" + str(pHome[0]) + "," + str(pHome[1]) + "," + str(pHome[2])
 s.send(command.encode('ascii'))
 """
 
-
+"""
 #7. movel x 400 with a,v/ time t: movel_x400_Singular
 a = 1.0
 v = 0.15
@@ -94,3 +95,4 @@ pTarget = np.array([-0.150,0.200,0.300,2.2214,2.2214,0])
 command = "movel(p[" + str(pTarget[0]) + "," + str(pTarget[1]) + "," + str(pTarget[2]) +"," + str(pTarget[3]) +"," + str(pTarget[4]) +"," + str(pTarget[5]) +"], a=" + str(a) + ", v=" + str(v) + ")\n"
 #command = "movel(p[" + str(pTarget[0]) + "," + str(pTarget[1]) + "," + str(pTarget[2]) +"," + str(pTarget[3]) +"," + str(pTarget[4]) +"," + str(pTarget[5]) +"], t= " + str(t) + ")\n"
 s.send(command.encode('ascii'))
+"""
