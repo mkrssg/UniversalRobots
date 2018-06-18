@@ -3,7 +3,6 @@ import numpy as np
 import importlib
 import sys
 sys.path.insert(0, 'C:/Users/mkris/Documents/Master/3. Semester/Robotik/code')
-#imp.load_module('libary_1', 'C:/Users/mkris/Documents/Master/3. Semester/Robotik/code')
 import libary_1 as robo
 importlib.reload(robo)
 
