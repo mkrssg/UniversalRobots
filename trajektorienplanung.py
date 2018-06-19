@@ -1,4 +1,5 @@
 import numpy as np
+import libary_1 as robo
 
 """
 1. Berechnung der Schaltzeitpunkte
@@ -300,5 +301,19 @@ def traj_poseSample (pStart, pTarget, vmax, amax, delta_t):
     
     return[pose_t, pose_vt, pose_at, t]
 
+def ik_pose(pStart, pTarget, vmax, amax, delta_t):
+    [pose_t, pose_vt, pose_at, t] = traj_poseSample(pStart, pTarget, vmax, amax, delta_t)
+    q_t = np.zeros((pose_T.shape))
+
+    """    sol  """
+    sol = 0
+    
+    for t in range(pose_t.shape[0]):
+        q_t[t,:] = robo.ik_ur(dh_para, pose_t, sol)
+        
+    return q_t
+        
+    
+    
 
     

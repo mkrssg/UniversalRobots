@@ -13,3 +13,6 @@ q = np.array([0, -1.570796327, 0, -1.570796327, 0, 0])
 
 J = j.jacobi_ur(dh_para, q)
 print(J)
+
+
+v_tcp(qT, vT, dh_para)

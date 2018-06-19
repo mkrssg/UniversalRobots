@@ -183,8 +183,6 @@ def fk_ur(dh_para, q):
     
     T_0_6 = np.dot(np.dot(np.dot(np.dot(np.dot(T_0_1, T_1_2),T_2_3),T_3_4),T_4_5),T_5_6)
 
-    #print("T01 = ", T_0_1)
-    #print("T02 = ", np.dot(T_0_1,T_1_2))
     print("T_0_6 fk= ",T_0_6)
     
     return T_0_6
