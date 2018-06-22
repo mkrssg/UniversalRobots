@@ -24,7 +24,7 @@ from time import sleep
 #HOST = "192.168.182.128" # URsim IP Prakt
 
 #ROBOT
-HOST = "10.27.200.128"
+HOST = "192.168.25.130"
 
 PORT = 30002 # port
 
@@ -168,10 +168,10 @@ pTarget = np.array([-0.150, 0.200, 0.300,2.2214,2.2214,0])
 # sleep(5)
 
 #2. Start Position
-command = "movej(p[" + str(pHome[0]) + "," + str(pHome[1]) + "," + str(pHome[2]) +"," + str(pHome[3]) +"," + str(pHome[4]) +"," + str(pHome[5]) +"] )\n"
-s.send(command.encode('ascii'))
+#command = "movej(p[" + str(pHome[0]) + "," + str(pHome[1]) + "," + str(pHome[2]) +"," + str(pHome[3]) +"," + str(pHome[4]) +"," + str(pHome[5]) +"] )\n"
+#s.send(command.encode('ascii'))
 
-sleep(6)
+#sleep(6)
 
 #3. movel_x400_Singular
 command = "movel(p[" + str(pTarget[0]) + "," + str(pTarget[1]) + "," + str(pTarget[2]) +"," + str(pTarget[3]) +"," + str(pTarget[4]) +"," + str(pTarget[5]) +"], a=" + str(a) + ", v=" + str(v) + ")\n"

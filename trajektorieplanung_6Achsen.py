@@ -15,24 +15,24 @@ save_to ='C:/Users/mkris/Documents/Master/3. Semester/Robotik/code/trajektorien_
 6 Achsen Trajektorieplanung
 """
 
-vmax = 1
-amax = 2
+vmax = 0.8
+amax = 1
 # Abtastrate
 delta_t = 1/125
 
-q1Start = 0
-q2Start = 0
-q3Start = 0
-q4Start = 0
-q5Start = 0
-q6Start = 0
+q1Start = 0/180*np.pi
+q2Start = -90/180*np.pi
+q3Start = 90/180*np.pi
+q4Start = -90/180*np.pi
+q5Start = -90/180*np.pi
+q6Start = 0/180*np.pi
 
-q1Target = 1
-q2Target = 0
-q3Target = 3
-q4Target = 0
-q5Target = 0
-q6Target = 0
+q1Target = 90/180*np.pi
+q2Target = -60/180*np.pi
+q3Target = 30/180*np.pi
+q4Target = -90/180*np.pi
+q5Target = -90/180*np.pi
+q6Target = 0/180*np.pi
 
 a_array = np.zeros(6)
 v_array = np.zeros(6)
@@ -108,25 +108,25 @@ for i in range(6):
     plt.plot(t, qt)
     plt.xlabel('t in s')
     plt.ylabel('q')
-    plt.title('Position')
+    plt.title( name + '_q_calculation')
     if i == 5:
-        plt.savefig(save_to + '/position.png')
+        plt.savefig(save_to + '_q_calculation.png')
     
     plt.figure(1)
-    plt.title('Velocity')
+    plt.title( name + '_qd_calculation')
     plt.xlabel('t in s')
-    plt.ylabel('v')
+    plt.ylabel('qd')
     plt.plot(t,vt)
     if i == 5:
-        plt.savefig(save_to + '/velocity.png')
+        plt.savefig(save_to + '_qd_calculation..png')
     
     plt.figure(2)
     plt.plot(t,at)
     plt.xlabel('t in s')
-    plt.ylabel('a')
-    plt.title('Acceleration')
+    plt.ylabel('qdd')
+    plt.title( name + '_qdd_calculation')
     if i == 5:
-        plt.savefig(save_to + '/acceleration.png')
+        plt.savefig(save_to + name + '_qdd_calculation.png')
 
 print("...plots saved")
 plt.show() 

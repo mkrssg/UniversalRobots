@@ -6,9 +6,9 @@ import sys
 sys.path.append('..')
 import rtde.csv_reader as csv_reader
 
-openstr = 'movel_x400_robo.csv'
-saveplots = './roboter/plots/'
-with open('./roboter/'+ openstr) as csvfile:
+openstr = 'movel_distance-y=400_singularity_simu.csv'
+saveplots = './simulation/plots/'
+with open('./simulation/'+ openstr) as csvfile:
     r = csv_reader.CSVReader(csvfile)
 
 # plot
@@ -20,7 +20,7 @@ plt.plot(r.timestamp, r.target_q_1, color='g', label='q2')
 plt.plot(r.timestamp, r.target_q_2, color='b', label='q3')
 plt.plot(r.timestamp, r.target_q_3, color='c',label='q4')
 plt.plot(r.timestamp, r.target_q_4, color='violet', label='q5')
-#plt.plot(r.timestamp, r.target_q_5, color='orange', label='q6')
+plt.plot(r.timestamp, r.target_q_5, color='orange', label='q6')
 
 plt.title(openstr[:-4])
 plt.xlabel('t in s')

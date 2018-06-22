@@ -20,12 +20,12 @@ s.connect((HOST, PORT))
 
 #sleep(5)
 #
-q1 = 0/180*np.pi
-q2 = -90/180*np.pi
-q3 = 90/180*np.pi
-q4 = -90/180*np.pi
-q5 = -90/180*np.pi
-q6 = 0/180*np.pi
+#q1 = 0/180*np.pi
+#q2 = -90/180*np.pi
+#q3 = 90/180*np.pi
+#q4 = -90/180*np.pi
+#q5 = -90/180*np.pi
+#q6 = 0/180*np.pi
 ##
 #3 Achsen
 # von:
@@ -36,12 +36,12 @@ q6 = 0/180*np.pi
 #q5 = -90/180*np.pi
 #q6 = 0/180*np.pi
 # zu:
-#q1 = 90/180*np.pi
-#q2 = 0/180*np.pi
-#q3 = -90/180*np.pi
-#q4 = -90/180*np.pi
-#q5 = -90/180*np.pi
-#q6 = 0/180*np.pi
+q1 = 90/180*np.pi
+q2 = -60/180*np.pi
+q3 = 30/180*np.pi
+q4 = -90/180*np.pi
+q5 = -90/180*np.pi
+q6 = 0/180*np.pi
 
 #bei allen 3 Achsen gleichzeitig bewgegen zu:
 #q1 = 90/180*np.pi
@@ -54,7 +54,7 @@ q6 = 0/180*np.pi
 #Beschleinigung
 a = 1.0
 v = 0.8
-t = 10
+#t = 10
 
 command = "movej([" + str(q1) + "," + str(q2) + ","+str(q3)+","+str(q4)+","+str(q5)+","+str(q6)+"], a=" + str(a) +", v=" +str(v)+")\n"
 #command = "movej([" + str(q1) + "," + str(q2) + ","+str(q3)+","+str(q4)+","+str(q5)+","+str(q6)+"],t=" + str(t) +")\n"
