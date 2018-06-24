@@ -1,5 +1,8 @@
 import numpy as np
+import importlib
+
 import libary_1 as robo
+importlib.reload(robo)
 
 """
 1. Berechnung der Schaltzeitpunkte
@@ -153,6 +156,25 @@ def traj_6_axis(qStart, qTarget, vmax, amax):
         
     print("Achsen ts1, ts2, tges, a, v : ", "\n", achse)
     return achse
+
+"""
+get a v for movej with given time
+"""
+def movej_with_t_getav (qStart, qTarget, tges):
+    if (abs(qTarget-qStart) < 1.5):
+        # Dreieck 
+        ts1 = tges/2
+    else: 
+        # Trapez
+        ts1 = 0.25 * tges
+ 
+  
+
+    delta_q = abs(qTarget-qStart)
+    a = delta_q/(ts1*tges-ts1**2)       # a ist neues amax
+    v = a * ts1                         # v ist neues vmax
+    
+    return [a, v]
     
 """
 4. Pose
@@ -185,7 +207,8 @@ def traj_poseSample (pStart, pTarget, vmax, amax, delta_t):
     
     delta_p = np.sqrt((pStart[0] - pTarget[0])**2 + (pStart[1] - pTarget[1])**2 + (pStart[2] - pTarget[2])**2)
     direction = pTarget[0:3] - pStart[0:3]
-    gradient = direction / delta_p    # richtig ????????????????????????
+    
+    gradient = direction / delta_p
     
      
     #timestamp array
@@ -301,15 +324,23 @@ def traj_poseSample (pStart, pTarget, vmax, amax, delta_t):
     
     return[pose_t, pose_vt, pose_at, t]
 
-def ik_pose(pStart, pTarget, vmax, amax, delta_t):
-    [pose_t, pose_vt, pose_at, t] = traj_poseSample(pStart, pTarget, vmax, amax, delta_t)
-    q_t = np.zeros((pose_T.shape))
+"""
+get q with ik
+"""
 
-    """    sol  """
-    sol = 0
+def ik_pose(pStart, pTarget, vmax, amax, delta_t, dh_para):
+    
+    [pose_t, pose_vt, pose_at, t] = traj_poseSample(pStart, pTarget, vmax, amax, delta_t)
+    q_t = np.zeros((pose_t.shape))
+
+    sol = 6
     
     for t in range(pose_t.shape[0]):
-        q_t[t,:] = robo.ik_ur(dh_para, pose_t, sol)
+        print(pose_t[t,:])
+        q_t[t,:] = robo.ik_ur(dh_para, pose_t[t,:], sol)
+        #print(q_t[t,:])
+        
+
         
     return q_t
         

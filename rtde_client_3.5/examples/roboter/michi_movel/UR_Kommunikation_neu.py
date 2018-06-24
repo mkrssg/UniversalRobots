@@ -155,11 +155,11 @@ v = 0.2
 #qInit = np.array([np.deg2rad(30),np.deg2rad(-90),np.deg2rad(-90),np.deg2rad(0),np.deg2rad(90),np.deg2rad(0)])
 qInit = np.array([np.deg2rad(-30.51),np.deg2rad(-91.41),np.deg2rad(-110.87),np.deg2rad(22.28),np.deg2rad(120.52),np.deg2rad(0.01)])
 #non singularity
-#pHome = np.array([-0.250,-0.200, 0.300,2.2214,2.2214,0])
-#pTarget = np.array([-0.250, 0.200, 0.300,2.2214,2.2214,0])
+pHome = np.array([-0.250,-0.200, 0.300,2.2214,2.2214,0])
+pTarget = np.array([-0.250, 0.200, 0.300,2.2214,2.2214,0])
 # singularity
-pHome = np.array([-0.150,-0.200, 0.300,2.2214,2.2214,0])
-pTarget = np.array([-0.150, 0.200, 0.300,2.2214,2.2214,0])
+#pHome = np.array([-0.150,-0.200, 0.300,2.2214,2.2214,0])
+#pTarget = np.array([-0.150, 0.200, 0.300,2.2214,2.2214,0])
 
 #1. Position near Start
 # command = "movej([" + str(qInit[0]) + "," + str(qInit[1]) + "," + str(qInit[2]) +"," + str(qInit[3]) +"," + str(qInit[4]) +"," + str(qInit[5]) +"] )\n"

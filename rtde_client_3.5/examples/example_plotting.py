@@ -6,7 +6,7 @@ import sys
 sys.path.append('..')
 import rtde.csv_reader as csv_reader
 
-openstr = 'movel_distance-y=400_singularity_simu.csv'
+openstr = 'movel_distance-y=400_simu.csv'
 saveplots = './simulation/plots/'
 with open('./simulation/'+ openstr) as csvfile:
     r = csv_reader.CSVReader(csvfile)
