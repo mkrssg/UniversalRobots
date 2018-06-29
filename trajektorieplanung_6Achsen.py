@@ -10,13 +10,13 @@ import numpy as np
 Save plots to
 """
 save_to ='C:/Users/mkris/Documents/Master/3. Semester/Robotik/code/trajektorien_plots/'
-name = 'movej_0-90q1_t=10'
+name = 'movej_0-90q1'
 """
 6 Achsen Trajektorieplanung
 """
 
-#vmax = 0.8
-#amax = 1
+vmax = 0.8
+amax = 1
 # Abtastrate
 delta_t = 1/125
 
@@ -43,23 +43,23 @@ move j with t = 10s
 #[amax, vmax] = tp.movej_with_t_getav(q1Start, q1Target, tges)
 
 
-"""
+
 # 3 Achsen Sync
 
-q1Start = 0/180*np.pi
-q2Start = -90/180*np.pi
-q3Start = 90/180*np.pi
-q4Start = -90/180*np.pi
-q5Start = -90/180*np.pi
-q6Start = 0/180*np.pi
+#q1Start = 0/180*np.pi
+#q2Start = -90/180*np.pi
+#q3Start = 90/180*np.pi
+#q4Start = -90/180*np.pi
+#q5Start = -90/180*np.pi
+#q6Start = 0/180*np.pi
+#
+#q1Target = 90/180*np.pi
+#q2Target = -60/180*np.pi
+#q3Target = 30/180*np.pi
+#q4Target = -90/180*np.pi
+#q5Target = -90/180*np.pi
+#q6Target = 0/180*np.pi
 
-q1Target = 90/180*np.pi
-q2Target = -60/180*np.pi
-q3Target = 30/180*np.pi
-q4Target = -90/180*np.pi
-q5Target = -90/180*np.pi
-q6Target = 0/180*np.pi
-"""
 a_array = np.zeros(6)
 v_array = np.zeros(6)
 
@@ -103,9 +103,10 @@ for i in range(6):
         plt.plot(t, qt, color = 'violet', label = 'q5')
     elif ( i == 5):
         plt.plot(t, qt, color = 'orange', label = 'q6')
-    plt.xlabel('t in s')
-    plt.ylabel('q')
+    plt.xlabel('t [s]')
+    plt.ylabel('q [rad]')
     plt.title( name + '_calculation')
+    plt.grid(True)
     leg = plt.legend(loc='best',  shadow=True, fancybox=True)
     if i == 5:
         plt.savefig(save_to + name + '_q_calculation.png')
@@ -114,8 +115,8 @@ for i in range(6):
     
     plt.figure(1)
     plt.title( name + '_calculation')
-    plt.xlabel('t in s')
-    plt.ylabel('qd')
+    plt.xlabel('t [s]')
+    plt.ylabel('qd [rad/s]')
     if (i == 0):
         plt.plot(t, vt, color = 'r', label = 'qd1')
     elif (i == 1):
@@ -129,6 +130,7 @@ for i in range(6):
     elif ( i == 5):
         plt.plot(t, vt, color = 'orange', label = 'qd6')    
         
+    plt.grid(True)
     leg = plt.legend(loc='best',  shadow=True, fancybox=True)
     if i == 5:
         plt.savefig(save_to + name + '_qd_calculation..png')
@@ -149,9 +151,10 @@ for i in range(6):
     elif ( i == 5):
         plt.plot(t, at, color = 'orange', label = 'qdd6')     
     
-    plt.xlabel('t in s')
-    plt.ylabel('qdd')
+    plt.xlabel('t [s]')
+    plt.ylabel('qdd [rad/s^2]')
     plt.title( name + '_calculation')
+    plt.grid(True)
     leg = plt.legend(loc='best',  shadow=True, fancybox=True)
 
     if i == 5:

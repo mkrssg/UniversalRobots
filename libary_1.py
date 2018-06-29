@@ -182,10 +182,23 @@ def fk_ur(dh_para, q):
     T_5_6 = dh(dh_para[5][0], dh_para[5][1], dh_para[5][2], q[5])
     
     T_0_6 = np.dot(np.dot(np.dot(np.dot(np.dot(T_0_1, T_1_2),T_2_3),T_3_4),T_4_5),T_5_6)
-
-    print("T_0_6 fk= ",T_0_6)
     
     return T_0_6
+
+#def fk_ur(dh_para, q):
+#    """
+#    Forward Kinematics for UR type robots
+#    """
+#    T_0_6 = np.eye(4)
+#    i = 0
+#    for dhSP in dh_para:
+#        #print(dhSP)
+#        T = dh(dhSP[0],dhSP[1],dhSP[2], q[i])
+#        #print(T)
+#        T_0_6 = np.dot(T_0_6,T)
+#        #print(T_0_6)
+#        i = i+1
+#    return T_0_6
 
 def ik_ur(dh_para, tcp, sol):
     #Inverse Kinematics for UR type Robots

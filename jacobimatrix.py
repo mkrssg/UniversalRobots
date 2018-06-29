@@ -30,7 +30,7 @@ tcp Geschwindigkeit --> movel
 """ 
 
 def v_tcp(qT, vT, dh_para):
-    v_tcp = np.zeros(qT.shape[0],6)
+    v_tcp = np.zeros((qT.shape[0],6))
     
     for t in range(qT.shape[0]):
         J_t = jacobi_ur(dh_para, qT[t])
@@ -41,7 +41,8 @@ def v_tcp(qT, vT, dh_para):
 Gelenkgeschwindigkeit --> movej
 """
 def vt(qT, pose_vt, dh_para):
-    v_t = np.zeros((qT.shape[0],6))
+    print(qT)
+    v_t = np.zeros((qT.shape))
     
     for t in range(qT.shape[0]):
         J_t = jacobi_ur(dh_para, qT[t])

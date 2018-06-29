@@ -6,7 +6,7 @@ import sys
 sys.path.append('..')
 import rtde.csv_reader as csv_reader
 
-openstr = 'movel_distance-y=400_simu.csv'
+openstr = 'movej_0-30q1_t=10_simulation.csv'
 saveplots = './simulation/plots/'
 with open('./simulation/'+ openstr) as csvfile:
     r = csv_reader.CSVReader(csvfile)
@@ -23,11 +23,13 @@ plt.plot(r.timestamp, r.target_q_4, color='violet', label='q5')
 plt.plot(r.timestamp, r.target_q_5, color='orange', label='q6')
 
 plt.title(openstr[:-4])
-plt.xlabel('t in s')
-plt.ylabel('q')
+plt.xlabel('t [s]')
+plt.ylabel('q [rad]')
+plt.grid(True)
 leg = plt.legend(loc='lower left',  shadow=True, fancybox=True)
-
 plt.savefig(saveplots + openstr[:-4] + '_q.png')
+
+
 
 #qd
 plt.figure()
@@ -39,10 +41,14 @@ plt.plot(r.timestamp, r.target_qd_4, color='violet', label='qd5')
 plt.plot(r.timestamp, r.target_qd_5, color='orange', label='qd6')
 
 plt.title(openstr[:-4])
-plt.xlabel('t in s')
-plt.ylabel('qd')
+plt.xlabel('t [s]')
+plt.ylabel('qd [rad/s]')
+plt.grid(True)
 leg = plt.legend(loc='best',  shadow=True, fancybox=True)
 plt.savefig(saveplots + openstr[:-4] + '_qd.png')
+
+
+
 
 #qdd
 plt.figure()
@@ -54,8 +60,9 @@ plt.plot(r.timestamp, r.target_qdd_4, color='violet', label='qdd5')
 plt.plot(r.timestamp, r.target_qdd_5, color='orange', label='qdd6')
 
 plt.title(openstr[:-4])
-plt.xlabel('t in s')
-plt.ylabel('qdd')
+plt.xlabel('t [s]')
+plt.ylabel('qdd [rad/s^2]')
+plt.grid(True)
 leg = plt.legend(loc='best',  shadow=True, fancybox=True)
 plt.savefig(saveplots + openstr[:-4] + '_qdd.png')
 
