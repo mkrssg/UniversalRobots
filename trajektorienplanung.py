@@ -323,7 +323,6 @@ def ik_pose(pose_t, dh_para, sol):
     
     i = 0
     for row in q_t:
-        
         q_t[i,:] = robo.ik_ur(dh_para, pose_t[i,:], sol)
         i += 1
         
