@@ -14,7 +14,7 @@ import numpy as np
 Save plots to
 """
 save_to ='C:/Users/mkris/Documents/Master/3. Semester/Robotik/code/trajektorien_plots/'
-name = 'xx'
+name = 'movel_distance-y=400_singularity'
 
 # non singularity
 #pStart = np.array([-0.250,-0.200, 0.300,2.2214,2.2214,0])
@@ -34,12 +34,12 @@ name = 'xx'
 
 """ neue Werte Fixing"""
 """non singu"""
-pStart = np.array([0.300,-0.200,0.350,2,-2,2])
-pTarget = np.array([0.300,0.200,0.350,2,-2,2])
+#pStart = np.array([0.300,-0.200,0.350,2,-2,2])
+#pTarget = np.array([0.300,0.200,0.350,2,-2,2])
 
 """singularity"""
-#pStart = np.array([0.200,-0.200,0.350,2,-2,2])
-#pTarget = np.array([0.200,0.200,0.350,2,-2,2])
+pStart = np.array([0.200,-0.200,0.350,2,-2,2])
+pTarget = np.array([0.200,0.200,0.350,2,-2,2])
 
 # florens
 #pStart = np.array([300,-200,400,2.4186,-2.4185,2.4185])
@@ -57,7 +57,7 @@ dh_para = np.array([(1.570796327, 0, 0.1519), (0, -0.24365, 0), (0, -0.21325, 0)
 amax = 1.0
 vmax = 0.2
 delta_t = 1/125
-sol = 0
+sol = 1
 
 #for sol in range(8):
 #    print("Solution: ", sol)
@@ -72,7 +72,7 @@ print("Solution: ", sol)
 """ get q """
 q_t = tp.ik_pose(pose_t, dh_para, sol)
 v_t = jc.vt(q_t, pose_vt, dh_para)
-v_tcp = jc.v_tcp(q_t, pose_vt, dh_para)
+#v_tcp = jc.v_tcp(q_t, pose_vt, dh_para)
 print(v_tcp)
 
 #print("Solution: ", sol)
@@ -132,23 +132,23 @@ for i in range(6):
     plt.figure(2)
     #    plt.plot(t, q_t)
     if (i == 0):
-        plt.plot(t, v_tcp[:,i], color = 'r', label = 'q1')
+        plt.plot(t, v_t[:,i], color = 'r', label = 'q1')
     elif (i == 1):
-        plt.plot(t, v_tcp[:,i], color = 'g', label = 'q2')
+        plt.plot(t, v_t[:,i], color = 'g', label = 'q2')
     elif (i == 2):
-        plt.plot(t, v_tcp[:,i], color = 'b', label = 'q3')
+        plt.plot(t, v_t[:,i], color = 'b', label = 'q3')
     elif (i == 3):
-        plt.plot(t, v_tcp[:,i], color = 'c', label = 'q4')
+        plt.plot(t, v_t[:,i], color = 'c', label = 'q4')
     elif (i == 4):
-        plt.plot(t, v_tcp[:,i], color = 'violet', label = 'q5')
+        plt.plot(t, v_t[:,i], color = 'violet', label = 'q5')
     elif ( i == 5):
-        plt.plot(t, v_tcp[:,i], color = 'orange', label = 'q6')
+        plt.plot(t, v_t[:,i], color = 'orange', label = 'q6')
     plt.title(name + '_qd_calculation')
     plt.xlabel('t [s]')
     plt.ylabel('qd [rad/s]')
     plt.grid(True)
     leg = plt.legend(loc='best',  shadow=True, fancybox=True)
-#plt.savefig(save_to + name + '_qd_calculation.png')
+plt.savefig(save_to + name + '_qd_calculation.png')
 plt.show()
 
 #

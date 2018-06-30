@@ -158,6 +158,7 @@ def dh(alpha, a, d, theta):
     sa = np.sin(alpha)
 		
     T = np.array([(ct, -st*ca, st*sa, a*ct),(st, ct*ca, -ct*sa, a*st),(0, sa, ca, d),(0, 0, 0, 1)])
+
     return T
 
 def dhm(alpha, a, d, theta):

@@ -44,12 +44,11 @@ def v_tcp(q_t, v_t, dh_para):
 """
 Gelenkwinkelgeschwindigkeit --> movej
 """
-def vt(qT, pose_vt, dh_para):
-    print(qT)
-    v_t = np.zeros(qT.shape)
+def vt(q_t, pose_vt, dh_para):
+    v_t = np.zeros(q_t.shape)
     
-    for t in range(qT.shape[0]):
-        J_t = jacobi_ur(dh_para, qT[t])
+    for t in range(q_t.shape[0]):
+        J_t = jacobi_ur(dh_para, q_t[t])
         try: 
             J_t_inv = np.linalg.inv(J_t)
             v_t[t] = np.dot(J_t_inv, pose_vt[t])
