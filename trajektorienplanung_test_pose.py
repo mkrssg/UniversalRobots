@@ -14,7 +14,7 @@ import numpy as np
 Save plots to
 """
 save_to ='C:/Users/mkris/Documents/Master/3. Semester/Robotik/code/trajektorien_plots/'
-name = 'movel_distance-y=400'
+name = 'movel_distance-y=400_singularity'
 
 # non singularity
 #pStart = np.array([-0.250,-0.200, 0.300,2.2214,2.2214,0])
@@ -34,11 +34,11 @@ name = 'movel_distance-y=400'
 
 """ neue Werte Fixing"""
 """non singu"""
-pStart = np.array([0.300,-0.200,0.350,2,-2,2])
-pTarget = np.array([0.300,0.200,0.350,2,-2,2])
+#pStart = np.array([0.300,-0.200,0.350,2,-2,2])
+#pTarget = np.array([0.300,0.200,0.350,2,-2,2])
 """singularity"""
-#pStart = np.array([0.200,-0.200,0.350,2,-2,2])
-#pTarget = np.array([0.200,0.200,0.350,2,-2,2])
+pStart = np.array([0.200,-0.200,0.350,2,-2,2])
+pTarget = np.array([0.200,0.200,0.350,2,-2,2])
 
 # florens
 #pStart = np.array([300,-200,400,2.4186,-2.4185,2.4185])
@@ -50,8 +50,8 @@ pTarget = np.array([0.300,0.200,0.350,2,-2,2])
 #pTarget = np.array([0.250, 0.100, 0.380,0.6453,1.4727,0.6453])
 
 
-#dh_para = np.array([(1.570796327, 0, 151.9), (0, -243.65, 0), (0, -213.25, 0), (1.570796327, 0, 112.35), (-1.570796327, 0, 85.35), (0, 0, 81.9)])
-dh_para = np.array([(1.570796327, 0, 0.1519), (0, -0.24365, 0), (0, -0.21325, 0), (1.570796327, 0, 0.11235), (-1.570796327, 0, 0.08535), (0, 0, 0.0819)])
+dh_para = np.array([(1.570796327, 0, 151.9), (0, -243.65, 0), (0, -213.25, 0), (1.570796327, 0, 112.35), (-1.570796327, 0, 85.35), (0, 0, 81.9)])
+#dh_para = np.array([(1.570796327, 0, 0.1519), (0, -0.24365, 0), (0, -0.21325, 0), (1.570796327, 0, 0.11235), (-1.570796327, 0, 0.08535), (0, 0, 0.0819)])
 
 amax = 1.0
 vmax = 0.2

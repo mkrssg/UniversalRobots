@@ -6,7 +6,7 @@ import libary_1 as robo
 importlib.reload(robo)
 
 def jacobi_ur(dh_para, q):
-    J = np.zeros([q.size, q.size])
+    J = np.zeros((q.size, q.size))
     T = np.eye(4)
     T_0_i = np.eye(4)
     
@@ -15,34 +15,38 @@ def jacobi_ur(dh_para, q):
     
     i = 0
     for i in range(6):
-        T = robo.dh(dh_para[i,0], dh_para[i,1], dh_para[i,2], q[i])  ####
-        T_0_i = np.dot(T_0_i, T)
+        
         z_i = T_0_i[0:3, 2]
         p_i = T_0_i[0:3, 3]
+        
+        T = robo.dh(dh_para[i,0], dh_para[i,1], dh_para[i,2], q[i]) 
+        T_0_i = np.dot(T_0_i, T)
+        
         r = p - p_i
+        
         J[0:3, i] = np.cross(z_i, r)
         J[3:6, i] = z_i
         
     return J
 
 """
-tcp Geschwindigkeit --> movel
+tcp Geschwindigkeit über t = J_q_t * q_t
 """ 
 
-def v_tcp(qT, vT, dh_para):
-    v_tcp = np.zeros((qT.shape[0],6))
+def v_tcp(q_t, v_t, dh_para):
+    v_tcp = np.zeros((q_t.shape[0],6))
     
-    for t in range(qT.shape[0]):
-        J_t = jacobi_ur(dh_para, qT[t])
-        v_tcp[t] = np.dot(J_t, vT[t])
+    for t in range(q_t.shape[0]):
+        J_t = jacobi_ur(dh_para, q_t[t])
+        v_tcp[t] = np.dot(J_t, v_t[t])
     return v_tcp
 
 """
-Gelenkgeschwindigkeit --> movej
+Gelenkwinkelgeschwindigkeit --> movej
 """
 def vt(qT, pose_vt, dh_para):
     print(qT)
-    v_t = np.zeros((qT.shape))
+    v_t = np.zeros(qT.shape)
     
     for t in range(qT.shape[0]):
         J_t = jacobi_ur(dh_para, qT[t])
