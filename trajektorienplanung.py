@@ -124,38 +124,34 @@ def traj_6_axis(qStart, qTarget, vmax, amax):
     tges = np.zeros(6)
     
     # Matrix zeile für jede Achse mit: ts1, ts2, tges, a, v
-    achse = np.zeros((6,5))
-    
+    axis = np.zeros((6,5))
     tges_max = 0
     i_lead_axis = 0
-    
-    
     
     """
     ts1 ts2 tges
     """
     for i in range(6):
         [ts1[i],ts2[i],tges[i]] = traj_timestamps(qStart[i], qTarget[i], amax, vmax)
-        print("Achse",i+1," : ", "ts1= ", ts1[i],"ts2= ", ts2[i],"tges= ", tges[i])
         
-        achse[i, 0:3] = [ts1[i],ts2[i],tges[i]]
-        if  achse[i, 2] > tges_max:
-            tges_max = achse[i, 2]
+        axis[i, 0:3] = [ts1[i],ts2[i],tges[i]]
+        if  axis[i, 2] > tges_max:
+            tges_max = axis[i, 2]
             i_lead_axis = i
                 
-    print("Führungsachse = Achse",i_lead_axis+1)
+    print("Führungsachse = Achse ",i_lead_axis+1)
     
     for i in range(6):
         # neues a und v für alle Achsen außer Führungsachse
-        [achse[i,3], achse[i,4]] = traj_getav(qStart[i], qTarget[i], ts1[i_lead_axis], tges[i_lead_axis])
+        [axis[i,3], axis[i,4]] = traj_getav(qStart[i], qTarget[i], ts1[i_lead_axis], tges[i_lead_axis])
         # ts1 ts2 tges der Führungsachse entsprechen jetzt den anderen bewegenden Achsen
-        if achse[i, 2] != 0: #dann bewegt sich achse
-            achse[i, 0] = achse[i_lead_axis, 0]
-            achse[i, 1] = achse[i_lead_axis, 1]
-            achse[i, 2] = achse[i_lead_axis, 2]  
+        if axis[i, 2] != 0: #dann bewegt sich achse
+            axis[i, 0] = axis[i_lead_axis, 0]
+            axis[i, 1] = axis[i_lead_axis, 1]
+            axis[i, 2] = axis[i_lead_axis, 2]  
         
-    print("Achsen ts1, ts2, tges, a, v : ", "\n", achse)
-    return achse
+    print("Achsen ts1, ts2, tges, a, v : ", "\n", axis)
+    return axis
 
 """
 get a v for movej with given time
@@ -179,7 +175,7 @@ def movej_with_t_getav (qStart, qTarget, tges):
 """
 def traj_poseTimestamps (pStart, pTarget, vmax, amax):
         
-    pgrenz = (vmax*vmax) / amax
+    pgrenz = (vmax**2) / amax
     # Abstand der Punkte im Raum:
     delta_p = np.sqrt((pStart[0] - pTarget[0])**2 + (pStart[1] - pTarget[1])**2 + (pStart[2] - pTarget[2])**2)
     
@@ -202,10 +198,11 @@ def traj_poseSample (pStart, pTarget, vmax, amax, delta_t):
     
     [ts1, ts2, tges] =  traj_poseTimestamps(pStart, pTarget, vmax, amax)
     
-    
+    # delta_p = length = wurzel(x^2+y^2+z^2)
     delta_p = np.sqrt((pStart[0] - pTarget[0])**2 + (pStart[1] - pTarget[1])**2 + (pStart[2] - pTarget[2])**2)
     orientation = pTarget[0:3] - pStart[0:3]
-    gradient = orientation / delta_p
+    #normed vector:
+    normvec = 1/delta_p * orientation
     
      
     #timestamp array
@@ -226,7 +223,7 @@ def traj_poseSample (pStart, pTarget, vmax, amax, delta_t):
         
         # xyz und v zum Schaltzeitpunkt
         xyz_ts = np.zeros(3)
-        xyz_ts[0:3] = pStart[0:3] + 0.5 * amax * (ts1**2) * gradient
+        xyz_ts[0:3] = pStart[0:3] + 0.5 * amax * (ts1**2) * normvec
         vs = amax * ts1        
         
         i = 0
@@ -234,22 +231,22 @@ def traj_poseSample (pStart, pTarget, vmax, amax, delta_t):
             
             if (t[i] < ts1):
                 # steigend
-                pose_t[i, 0:3] = pStart[0:3] + 0.5 * amax * (ts1**2) * gradient   # Werte 0:3
+                pose_t[i, 0:3] = pStart[0:3] + 0.5 * amax * (ts1**2) * normvec
                 pose_t[i, 3:6] = pStart[3:6]
 
-                pose_vt[i, 0:3] = amax * ts1 * gradient
-                pose_at[i, 0:3] = amax * gradient
+                pose_vt[i, 0:3] = amax * ts1 * normvec
+                pose_at[i, 0:3] = amax * normvec
                 
                 vt[i] = amax * t[i]
                 at[i] = amax
 
             else:   
                 # fallend
-                pose_t[i, 0:3] = xyz_ts[0:3] + (vs * (t[i] -ts1) - 0.5 * amax * (t[i] - ts1)**2) * gradient   # Werte 0:3
+                pose_t[i, 0:3] = xyz_ts[0:3] + (vs * (t[i] -ts1) - 0.5 * amax * (t[i] - ts1)**2) * normvec
                 pose_t[i, 3:6] = pStart[3:6]
 
-                pose_vt[i, 0:3] = vs - amax * (t[i] - ts1) * gradient
-                pose_at[i, 0:3] = - amax * gradient
+                pose_vt[i, 0:3] = vs - amax * (t[i] - ts1) * normvec
+                pose_at[i, 0:3] = - amax * normvec
                 
                 vt[i] = vs - amax * (t[i] - ts1)
                 at[i] = -amax
@@ -271,19 +268,19 @@ def traj_poseSample (pStart, pTarget, vmax, amax, delta_t):
             """ delta_p > 0 """
             xyz_ts1 = np.zeros(3)
             xyz_ts2 = np.zeros(3)
-            xyz_ts1[0:3] = pStart[0:3] + 0.5 * amax * (ts1**2) * gradient
-            xyz_ts2[0:3] = pTarget[0:3] - (vmax**2 / (2 * amax)) * gradient
+            xyz_ts1[0:3] = pStart[0:3] + 0.5 * amax * (ts1**2) * normvec
+            xyz_ts2[0:3] = pTarget[0:3] - (vmax**2 / (2 * amax)) * normvec
             
         i = 0
         for i in range(t.size): 
             
             if (t[i] < ts1):
                 # steigend
-                pose_t[i, 0:3] = pStart[0:3] + (0.5 * amax * t[i]**2) * gradient   # Werte 0:3
+                pose_t[i, 0:3] = pStart[0:3] + (0.5 * amax * t[i]**2) * normvec   # Werte 0:3
                 pose_t[i, 3:6] = pStart[3:6]
 
-                pose_vt[i, 0:3] = amax * t[i] * gradient
-                pose_at[i, 0:3] = amax * gradient
+                pose_vt[i, 0:3] = amax * t[i] * normvec
+                pose_at[i, 0:3] = amax * normvec
                 
                 vt[i] = amax * t[i]
                 at[i] = amax
@@ -291,10 +288,10 @@ def traj_poseSample (pStart, pTarget, vmax, amax, delta_t):
             elif (t[i] < ts2):
                 # ebene
                 
-                pose_t[i, 0:3] = xyz_ts1[0:3] + ((t[i] - ts1) * vmax) * gradient   # Werte 0:3
+                pose_t[i, 0:3] = xyz_ts1[0:3] + ((t[i] - ts1) * vmax) * normvec   # Werte 0:3
                 pose_t[i, 3:6] = pStart[3:6]
 
-                pose_vt[i, 0:3] = vmax * gradient
+                pose_vt[i, 0:3] = vmax * normvec
                 # pose_at[i, 0:3] = 0
                              
                 vt[i] = vmax
@@ -302,11 +299,11 @@ def traj_poseSample (pStart, pTarget, vmax, amax, delta_t):
                 
             else:
                 # fallend
-                pose_t[i, 0:3] = xyz_ts2[0:3] + ((vmax + (amax * delta_p) / vmax) * (t[i] -ts2) * gradient - 0.5 * amax * (t[i]**2 - ts2**2)) * gradient   
+                pose_t[i, 0:3] = xyz_ts2[0:3] + ((vmax + (amax * delta_p) / vmax) * (t[i] -ts2) * normvec - 0.5 * amax * (t[i]**2 - ts2**2)) * normvec   
                 pose_t[i, 3:6] = pStart[3:6]
 
-                pose_vt[i, 0:3] = (-amax * t[i] + vmax + (amax * delta_p) / vmax) * gradient
-                pose_at[i, 0:3] = -amax * gradient
+                pose_vt[i, 0:3] = (-amax * t[i] + vmax + (amax * delta_p) / vmax) * normvec
+                pose_at[i, 0:3] = -amax * normvec
                             
                 vt[i] = -amax * t[i] + vmax + (amax * delta_p) / vmax
                 at[i] = -amax
@@ -318,9 +315,7 @@ get q with ik
 """
 def ik_pose(pose_t, dh_para, sol):
     
-    q_t = np.zeros((pose_t.shape[0],6))
-
-    
+    q_t = np.zeros((pose_t.shape[0],6))  
     i = 0
     for row in q_t:
         q_t[i,:] = robo.ik_ur(dh_para, pose_t[i,:], sol)
