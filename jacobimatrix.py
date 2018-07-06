@@ -2,7 +2,7 @@ import numpy as np
 import importlib
 import sys
 sys.path.insert(0, 'C:/Users/mkris/Documents/Master/3. Semester/Robotik/code')
-import libary_1 as robo
+import library as robo
 importlib.reload(robo)
 
 def jacobi_ur(dh_para, q):
@@ -30,7 +30,7 @@ def jacobi_ur(dh_para, q):
     return J
 
 """
-tcp Geschwindigkeit über t = J_q_t * q_t
+TCP Geschwindigkeit(t) = J(q(t)) * q(t)
 """ 
 
 def v_tcp(q_t, v_t, dh_para):
@@ -42,17 +42,25 @@ def v_tcp(q_t, v_t, dh_para):
     return v_tcp
 
 """
-Gelenkwinkelgeschwindigkeit --> movej
+Gelenkwinkelgeschwindigkeit(t) = v_tcp(t) * J_inverse(q(t))
 """
 def vt(q_t, pose_vt, dh_para):
     v_t = np.zeros(q_t.shape)
     
     for t in range(q_t.shape[0]):
         J_t = jacobi_ur(dh_para, q_t[t])
-        try: 
-            J_t_inv = np.linalg.inv(J_t)
-            v_t[t] = np.dot(J_t_inv, pose_vt[t])
-        except:
-            v_t[t] = np.zeros(6)
-    
+        J_t_inv = np.linalg.inv(J_t)
+        v_t[t] = np.dot(J_t_inv, pose_vt[t])
+      
     return v_t
+
+""" singularity """
+def singular(qT, dh_para):
+    
+    singularT = np.zeros(qT.shape[0])
+    
+    for i in range(qT.shape[0]):
+        J = jacobi_ur(qT[i], dh_para)
+        singularT[i] = np.linalg.det(J)
+        
+    return singularT

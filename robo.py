@@ -3,7 +3,7 @@ import numpy as np
 import importlib
 import sys
 sys.path.insert(0, 'C:/Users/mkris/Documents/Master/3. Semester/Robotik/code')
-import libary_1 as robo
+import library as robo
 importlib.reload(robo)
 
 #dh_para = np.array([(1.570796327, 0, 0.1519, 0), (0, -0.24365, 0, -1.570796327), (0, -0.21325, 0, 0), (1.570796327, 0, 0.11235, -1.570796327), (-1.570796327, 0, 0.08535, 0), (0, 0, 0.0819, 0)])

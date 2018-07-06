@@ -1,7 +1,6 @@
 import numpy as np
 import importlib
-import math
-import libary_1 as robo
+import library as robo
 importlib.reload(robo)
 
 """
@@ -156,14 +155,36 @@ def traj_6_axis(qStart, qTarget, vmax, amax):
 """
 get a v for movej with given time
 """
+""" check if triangle or trapez"""
+def check_plotfigure (qStart, qTarget):
+    # check wether a move j call without time would cause triangle or trapez
+    # test v and a 
+    plotfigure = 0 # --> wenn 0 returnt error
+    amax = 1
+    vmax = 0.8
+    [ts1, ts2, tges] = traj_timestamps(qStart, qTarget, amax, vmax)
+     
+    if (ts1 == ts2):
+        plotfigure = 1  # --> Dreieck
+    else:
+        plotfigure = 2  # --> Trapez
+
+    return plotfigure
+
 def movej_with_t_getav (qStart, qTarget, tges):
-    if (abs(qTarget-qStart) < 1.5):
+    plotfigure = check_plotfigure (qStart, qTarget)
+    
+    if (plotfigure == 1):
         # Dreieck 
         ts1 = tges/2
-    else: 
+    elif (plotfigure == 2): 
         # Trapez
         ts1 = 0.25 * tges
- 
+    else:
+        # Error
+        print("Error")
+        return 0
+    
     delta_q = abs(qTarget-qStart)
     a = delta_q/(ts1*tges-ts1**2)       # a ist neues amax
     v = a * ts1                         # v ist neues vmax

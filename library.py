@@ -22,7 +22,6 @@ def rotz(a):
 def transl(x, y, z):
     #Translation about x y z
     T = np.array([(1, 0, 0, x),(0, 1, 0, y,), (0, 0, 1, z), (0, 0, 0, 1)])
-    #print("Translation: ", T)
     return T
 
 def Tinv(T):
@@ -45,24 +44,18 @@ def T_2_rpy(T):
 def rpy_2_T(xyzrpy):
 	# roll pitch yaw to matrix 
    # roll(x, gamma) pitch(y, beta) yaw(z, alpha)
-   
-    x = xyzrpy[0]
-    y = xyzrpy[1]
-    z = xyzrpy[2]   
+     
     g = xyzrpy[3]   #gamma,roll,x
     b = xyzrpy[4]   #beta,pitch,y
     a = xyzrpy[5]   #alpha,yaw,z
         
-    R = np.eye(3)
-    R = np.dot(rotz(a), np.dot(roty(y), rotx(g)))
-
     T = np.eye(4)
     # Rotation
-    T[0:3,0:3] = R[0:3,0:3] 
+    T[0:3,0:3] = np.dot(rotz(a), np.dot(roty(xyzrpy[1]), rotx(g)))
     # Translation
-    T[0,3] = x
-    T[1,3] = y
-    T[2,3] = z
+    T[0,3] = xyzrpy[0]
+    T[1,3] = xyzrpy[1]
+    T[2,3] = xyzrpy[2]
     
     return T
 
@@ -158,8 +151,7 @@ def dhm(alpha, a, d, theta):
 
 
 def fk_ur(dh_para, q):
-#forward Kinematics for UR type robots
-
+    #forward Kinematics for UR type robots
     T_0_1 = dh(dh_para[0][0], dh_para[0][1], dh_para[0][2], q[0])
     T_1_2 = dh(dh_para[1][0], dh_para[1][1], dh_para[1][2], q[1])
     T_2_3 = dh(dh_para[2][0], dh_para[2][1], dh_para[2][2], q[2])

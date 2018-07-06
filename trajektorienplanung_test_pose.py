@@ -4,7 +4,6 @@ sys.path.insert(0, 'C:/Users/mkris/Documents/Master/3. Semester/Robotik/code')
 
 import trajektorienplanung as tp
 import jacobimatrix as jc
-import libary_1 as rl
 importlib.reload(tp)
 importlib.reload(jc)
 import matplotlib.pyplot as plt
@@ -25,22 +24,23 @@ delta_t = 1/125
 sol = 1
 
 """non singularity"""
-pStart = np.array([0.300,-0.200,0.350,2,-2,2])
-pTarget = np.array([0.300,0.200,0.350,2,-2,2])
+#pStart = np.array([0.300,-0.200,0.350,2,-2,2])
+#pTarget = np.array([0.300,0.200,0.350,2,-2,2])
 
 """singularity"""
-#pStart = np.array([0.200,-0.200,0.350,2,-2,2])
-#pTarget = np.array([0.200,0.200,0.350,2,-2,2])
+pStart = np.array([0.200,-0.200,0.350,2,-2,2])
+pTarget = np.array([0.200,0.200,0.350,2,-2,2])
 
 
 
 print("Solution: ", sol)
+
 [pose_t, pose_vt, pose_at, v_tcp, a_tcp, t] = tp.traj_poseSample (pStart, pTarget, vmax, amax, delta_t)
-""" get q """
 q_t = tp.ik_pose(pose_t, dh_para, sol)
 v_t = jc.vt(q_t, pose_vt, dh_para)
+singu_t = jc.singular(q_t, dh_para)
 #v_tcp = jc.v_tcp(q_t, pose_vt, dh_para)
-print(v_tcp)
+
 
 """ plots """
 
@@ -101,33 +101,9 @@ plt.savefig(save_to + name + '_qd_calculation.png')
 plt.show()
 
 #
-#plt.plot(t, pose_vt )
-#plt.title('Velocity')
-#plt.xlabel('t in s')
-#plt.ylabel('v')
-#leg = plt.legend(loc='best',  shadow=True, fancybox=True)
-#plt.show()
-#
-#
-#
-#plt.plot(t, pose_at)
-#plt.title('Acceleration')
-#plt.xlabel('t in s')
-#plt.ylabel('a')
-#leg = plt.legend(loc='best',  shadow=True, fancybox=True)
-#plt.show() 
-#
-#plt.plot(pose_t[:,0], pose_t[:,1] )
-#plt.title('xy')
-#plt.xlabel('x')
-#plt.ylabel('y')
-#leg = plt.legend(loc='best',  shadow=True, fancybox=True)
-#plt.show()
-#
-#
-#plt.plot(t, v_t )
-#plt.title('Velocity')
-#plt.xlabel('t in s')
-#plt.ylabel('v')
-#leg = plt.legend(loc='best',  shadow=True, fancybox=True)
-#plt.show()
+plt.plot(t, singu_t )
+plt.title('J')
+plt.xlabel('t in s')
+plt.ylabel('v')
+leg = plt.legend(loc='best',  shadow=True, fancybox=True)
+plt.show()
