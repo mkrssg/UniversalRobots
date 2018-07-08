@@ -1,6 +1,6 @@
 import sys
 import importlib
-sys.path.insert(0, 'C:/Users/mkris/Documents/Master/3. Semester/Robotik/code')
+sys.path.insert(0, './')
 import trajektorienplanung as tp
 importlib.reload(tp)
 import matplotlib.pyplot as plt
@@ -9,7 +9,7 @@ import numpy as np
 """
 Save plots to
 """
-save_to ='C:/Users/mkris/Documents/Master/3. Semester/Robotik/code/trajektorien_plots/'
+save_to ='./plots'
 name = 'movej_0-90q1'
 """
 6 Achsen Trajektorieplanung
