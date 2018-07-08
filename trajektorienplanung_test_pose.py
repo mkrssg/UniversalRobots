@@ -12,7 +12,7 @@ import numpy as np
 """
 Save plots to
 """
-save_to ='C:/Users/mkris/Documents/Master/3. Semester/Robotik/code/trajektorien/'
+save_to ='C:/Users/mkris/Documents/Master/3. Semester/Robotik/code/plots_trajektorien/'
 name = 'movel_distance-y=400'
 
 """ parameters """
@@ -38,20 +38,13 @@ print("Solution: ", sol)
 [pose_t, pose_vt, pose_at, v_tcp, a_tcp, t] = tp.traj_poseSample (pStart, pTarget, vmax, amax, delta_t)
 q_t = tp.ik_pose(pose_t, dh_para, sol)
 v_t = jc.vt(q_t, pose_vt, dh_para)
-singu_t = jc.singular(q_t, dh_para)
+#singu_t = jc.singular(q_t, dh_para)
 #v_tcp = jc.v_tcp(q_t, pose_vt, dh_para)
 
 
 """ plots """
 
-#plt.plot(t, pose_t[:,0], color='r', label='x')
-#plt.plot(t, pose_t[:,1], color='g', label='y')
-#plt.plot(t, pose_t[:,2], color='b', label='z')
-#plt.title('Position')
-#plt.xlabel('t in s')
-#plt.ylabel('position')
-#leg = plt.legend(loc='best',  shadow=True, fancybox=True)
-#plt.show()
+
 
 for i in range(6):
     plt.figure(1)
@@ -73,7 +66,7 @@ for i in range(6):
     plt.ylabel('q [rad]')
     plt.grid(True)
     leg = plt.legend(loc='best',  shadow=True, fancybox=True)
-plt.savefig(save_to + name + '_q_calculation.png')
+#plt.savefig(save_to + name + '_q_calculation.png')
 plt.show()
 #print("qt:   ", np.rad2deg(q_t[0,:]))
 
@@ -97,13 +90,36 @@ for i in range(6):
     plt.ylabel('qd [rad/s]')
     plt.grid(True)
     leg = plt.legend(loc='best',  shadow=True, fancybox=True)
-plt.savefig(save_to + name + '_qd_calculation.png')
+#plt.savefig(save_to + name + '_qd_calculation.png')
 plt.show()
 
-#
-plt.plot(t, singu_t )
-plt.title('J')
+""" x y z """
+plt.plot(t, pose_t[:,0], color='r', label='x')
+plt.plot(t, pose_t[:,1], color='g', label='y')
+plt.plot(t, pose_t[:,2], color='b', label='z')
+plt.title(name +'_calculation')
 plt.xlabel('t in s')
-plt.ylabel('v')
+plt.ylabel('Position [m]')
 leg = plt.legend(loc='best',  shadow=True, fancybox=True)
+plt.grid(True)
+#plt.savefig(save_to + name + '_calculation.png')
 plt.show()
+
+""" v TCP"""
+plt.plot(t, pose_vt[:,0], color='r', label='x')
+plt.plot(t, pose_vt[:,1], color='g', label='y')
+plt.plot(t, pose_vt[:,2], color='b', label='z')
+plt.title(name + '_v_tcp_calculation')
+plt.xlabel('t [s]')
+plt.ylabel('v [rad/s]')
+plt.grid(True)
+leg = plt.legend(loc='best',  shadow=True, fancybox=True)
+plt.savefig(save_to + name + '_v_calculation.png')
+plt.show()
+#
+#plt.plot(t, singu_t )
+#plt.title('J')
+#plt.xlabel('t in s')
+#plt.ylabel('v')
+#leg = plt.legend(loc='best',  shadow=True, fancybox=True)
+#plt.show()
