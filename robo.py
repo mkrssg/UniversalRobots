@@ -2,7 +2,7 @@
 import numpy as np
 import importlib
 import sys
-sys.path.insert(0, 'C:/Users/mkris/Documents/Master/3. Semester/Robotik/code')
+sys.path.insert(0, './code')
 import libary_1 as robo
 importlib.reload(robo)
 
