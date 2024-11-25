@@ -1,6 +1,6 @@
 import sys
 import importlib
-sys.path.insert(0, 'C:/Users/mkris/Documents/Master/3. Semester/Robotik/code')
+sys.path.insert(0, './code')
 import trajektorienplanung as tp
 importlib.reload(tp)
 import matplotlib.pyplot as plt

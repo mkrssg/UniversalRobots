@@ -2,7 +2,7 @@ import jacobimatrix as j
 import numpy as np
 import importlib
 import sys
-sys.path.insert(0, 'C:/Users/mkris/Documents/Master/3. Semester/Robotik/code')
+sys.path.insert(0, './code')
 importlib.reload(j)
 
 

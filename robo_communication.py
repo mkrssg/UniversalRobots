@@ -4,7 +4,7 @@ import socket
 import numpy as np
 from time import sleep
 
-HOST = "192.168.25.130"
+HOST = ""
 PORT = 30002
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
