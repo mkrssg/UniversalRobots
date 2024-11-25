@@ -6,9 +6,9 @@ import sys
 sys.path.append('..')
 import rtde.csv_reader as csv_reader
 
-openstr = 'movej_0-30q1_t=10_simulation.csv'
-saveplots = './simulation/plots/'
-with open('./simulation/'+ openstr) as csvfile:
+openstr = 'movel_distance-y=400_simulation.csv'
+saveplots = './simulation/'
+with open('C:/Users/mkris/Documents/Master/3. Semester/Robotik/code/plots_simulation/csv/'+ openstr) as csvfile:
     r = csv_reader.CSVReader(csvfile)
 
 # plot
@@ -27,7 +27,7 @@ plt.xlabel('t [s]')
 plt.ylabel('q [rad]')
 plt.grid(True)
 leg = plt.legend(loc='lower left',  shadow=True, fancybox=True)
-plt.savefig(saveplots + openstr[:-4] + '_q.png')
+#plt.savefig(saveplots + openstr[:-4] + '_q.png')
 
 
 
@@ -45,7 +45,7 @@ plt.xlabel('t [s]')
 plt.ylabel('qd [rad/s]')
 plt.grid(True)
 leg = plt.legend(loc='best',  shadow=True, fancybox=True)
-plt.savefig(saveplots + openstr[:-4] + '_qd.png')
+#plt.savefig(saveplots + openstr[:-4] + '_qd.png')
 
 
 
@@ -64,7 +64,36 @@ plt.xlabel('t [s]')
 plt.ylabel('qdd [rad/s^2]')
 plt.grid(True)
 leg = plt.legend(loc='best',  shadow=True, fancybox=True)
-plt.savefig(saveplots + openstr[:-4] + '_qdd.png')
+#plt.savefig(saveplots + openstr[:-4] + '_qdd.png')
 
+
+
+#move l - tcp pose
+plt.figure()
+plt.plot(r.timestamp, r.actual_TCP_pose_0, color='r', label='x')
+plt.plot(r.timestamp, r.actual_TCP_pose_1, color='g', label='y')
+plt.plot(r.timestamp, r.actual_TCP_pose_2, color='b', label='z')
+
+plt.title(openstr[:-4])
+plt.xlabel('t [s]')
+plt.ylabel('position [m]')
+plt.grid(True)
+leg = plt.legend(loc='best',  shadow=True, fancybox=True)
+plt.savefig(saveplots + openstr[:-4] + '_TCP_position.png')
 #plt.show()
+
+#move l - tcp geschwindigkeit
+plt.figure()
+plt.plot(r.timestamp, r.actual_TCP_speed_0, color='r', label='x')
+plt.plot(r.timestamp, r.actual_TCP_speed_1, color='g', label='y')
+plt.plot(r.timestamp, r.actual_TCP_speed_2, color='b', label='z')
+
+plt.title(openstr[:-4])
+plt.xlabel('t [s]')
+plt.ylabel('v [rad/s]')
+plt.grid(True)
+leg = plt.legend(loc='best',  shadow=True, fancybox=True)
+plt.savefig(saveplots + openstr[:-4] + '_TCP_speed.png')
+#plt.show()
+
 
